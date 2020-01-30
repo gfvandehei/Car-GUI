@@ -1,14 +1,15 @@
-from __future__ import print_function	# For Py2/3 compatibility
-import eel
+from sensors.sensors import Sensors
+from core.core import Core
 
-# Set web files folder
-eel.init('static')
-
-@eel.expose                         # Expose this function to Javascript
-def say_hello_py(x):
-    print('Hello from %s' % x)
-
-say_hello_py('Python World!')
-eel.say_hello_js('Python World!')   # Call a Javascript function
-
-eel.start('dashboard.html', size=(300, 200))    # Start
+Core.config.override({
+    "sensors": {
+        "storage_file": "store.json",
+        "detect_network": True,
+        "detect_serial": False
+    },
+    "logging": {
+        "name": "App",
+        "level": 5
+    }
+})
+Sensors.sensor_test()
