@@ -1,11 +1,12 @@
-from sensors.sensors import Sensors
-from core.core import Core
+from lib.sensors.sensors import Sensors
+from lib.core.core import Core
 
 Core.config.override({
     "sensors": {
         "storage_file": "store.json",
-        "detect_network": True,
-        "detect_serial": False
+        "network": {
+            "port": 65500
+        }
     },
     "logging": {
         "name": "App",

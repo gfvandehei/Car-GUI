@@ -1,7 +1,6 @@
 import socket
-from core.logger import Logger
-from sensors.sensor import Sensor
-
+from lib.core.logger import Logger
+from lib.sensors.sensor import Sensor
 
 class NetworkSensor(Sensor):
 
@@ -11,6 +10,7 @@ class NetworkSensor(Sensor):
         self.logger = logger
         self.connected_flag = False
         self.tcp_connection: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        
 
     def fully_initialize(self):
         self.tcp_connection.settimeout(5)

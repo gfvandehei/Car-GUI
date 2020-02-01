@@ -1,5 +1,5 @@
 import inspect
-from sensors.sensor import Sensor
+from lib.sensors.sensor import Sensor
 
 
 class SensorDetector(object):
@@ -11,7 +11,7 @@ class SensorDetector(object):
         if not inspect.ismethod(callback):
             raise(AssertionError("Callback is expected to be a function"))
         signature = inspect.signature(callback)
-        print(list(signature.parameters))
+        #print(list(signature.parameters))
         tlist = list(signature.parameters)
         if signature.parameters[tlist[0]].annotation != Sensor:
             raise(AssertionError("Attributes {} does not match (__:Sensor)".format(str(signature))))

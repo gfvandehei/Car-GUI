@@ -1,5 +1,5 @@
 from dependency_injector import containers, providers
-from core.logger import Logger
+from lib.core.logger import Logger
 
 
 class Core(containers.DeclarativeContainer):

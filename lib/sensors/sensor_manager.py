@@ -1,7 +1,6 @@
-from dependency_injector import providers
-from sensors.sensor_detector_manager import SensorDetectorManager
-from core.logger import Logger
-from sensors.sensor import Sensor
+from lib.sensors.sensor_detector_manager import SensorDetectorManager
+from lib.core.logger import Logger
+from lib.sensors.sensor import Sensor
 
 
 class SensorManager(object):
