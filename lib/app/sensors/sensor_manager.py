@@ -1,6 +1,6 @@
-from lib.sensors.sensor_detector_manager import SensorDetectorManager
-from lib.core.logger import Logger
-from lib.sensors.sensor import Sensor
+from lib.app.sensors.sensor_detector_manager import SensorDetectorManager
+from lib.app.core.logger import Logger
+from lib.app.sensors.sensor import Sensor
 
 
 class SensorManager(object):

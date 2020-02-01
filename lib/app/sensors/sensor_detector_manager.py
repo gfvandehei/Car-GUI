@@ -1,5 +1,5 @@
-from lib.sensors.sensor_detector_network import NetworkSensorDetector
-from lib.core.logger import Logger
+from lib.app.sensors.sensor_detector_network import NetworkSensorDetector
+from lib.app.core.logger import Logger
 
 
 class SensorDetectorManager(object):

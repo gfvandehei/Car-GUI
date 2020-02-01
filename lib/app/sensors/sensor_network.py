@@ -1,6 +1,6 @@
 import socket
-from lib.core.logger import Logger
-from lib.sensors.sensor import Sensor
+from lib.app.core.logger import Logger
+from lib.app.sensors.sensor import Sensor
 
 class NetworkSensor(Sensor):
 

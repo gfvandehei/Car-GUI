@@ -1,9 +1,8 @@
 import socket
 import struct
 from threading import Thread
-from lib.sensors.sensor_detector import SensorDetector
-from lib.sensors.sensor_network import NetworkSensor
-from lib.core.logger import Logger
+from lib.app.sensors.sensor_detector import SensorDetector
+from lib.app.core.logger import Logger
 from dependency_injector.providers import DelegatedFactory
 
 
@@ -40,6 +39,7 @@ class NetworkSensorDetector(SensorDetector):
 
             try:
                 sense_id, sense_tcp, sense_type = self.verify_data(data)
+                print("Got sense_id thing")
                 new_network_sensor = self.network_sensor_factory(sense_id, sense_tcp, sense_type, address)
                 self.fire_connect_event(new_network_sensor)
             except Exception as err:

@@ -1,11 +1,11 @@
 from dependency_injector import containers, providers
-from lib.sensors.sensor_manager import SensorManager
-from lib.sensors.sensor_store import SensorStore
-from lib.sensors.sensor_detector_manager import SensorDetectorManager
-from lib.sensors.sensor_network import Sensor
-from lib.sensors.sensor_network import NetworkSensor
-from lib.core.core import Core
-from lib.sensors.sensor_detector_network import NetworkSensorDetector
+from lib.app.sensors.sensor_manager import SensorManager
+from lib.app.sensors.sensor_store import SensorStore
+from lib.app.sensors.sensor_detector_manager import SensorDetectorManager
+from lib.app.sensors.sensor_network import NetworkSensor
+from lib.app.core.core import Core
+from lib.app.sensors.sensor_detector_network import NetworkSensorDetector
+
 
 def main(s, s1, s2):
     return

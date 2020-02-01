@@ -1,5 +1,5 @@
 import inspect
-from lib.sensors.sensor import Sensor
+from lib.app.sensors.sensor import Sensor
 
 
 class SensorDetector(object):

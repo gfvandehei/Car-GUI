@@ -1,6 +1,6 @@
 from os import path
 import json
-from lib.core.logger import Logger
+from lib.app.core.logger import Logger
 
 
 class SensorStore(object):

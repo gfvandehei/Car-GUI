@@ -1,5 +1,5 @@
-from lib.sensors.sensors import Sensors
-from lib.core.core import Core
+from lib.app.sensors.sensors import Sensors
+from lib.app.core.core import Core
 
 Core.config.override({
     "sensors": {
