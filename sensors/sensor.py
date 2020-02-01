@@ -1,24 +1,48 @@
-import socket
-from core.logger import Logger
-
-
 class Sensor(object):
-    def __init__(self, sensor_id: int, sensor_tcp_port: int, sensor_type: int, address: (str, int), logger: Logger):
-        self.sid = sensor_id
-        self.sensor_type = sensor_type
-        self.sensor_address = (address[0], sensor_tcp_port)
-        self.logger = logger
-        self.connected_flag = False
-        logger.print_initialization_message("New Sensor")
 
-        self.tcp_connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.tcp_connection.settimeout(5)
-        try:
-            logger.print_debug_msg(2, "Attempting connection to {}".format(self.sensor_address))
-            self.sensor_tcp_socket = self.tcp_connection.connect(self.sensor_address)
-            logger.print_debug_msg(2, "Succesfull connected to {}".format(self.sensor_address))
-            self.connected_flag = True
-        except socket.error:
-            logger.print_error_message(5, "TCP connection could not be made to {}".format(self.sensor_address))
-        except Exception as err:
-            print(err)
+    def __init__(self, sensor_id: int, sensor_type: int):
+        self._sensor_id = sensor_id
+        self._sensor_type = sensor_type
+
+        self._data_array = []
+        self._max_data_points = 200
+
+        self._subscribers = []
+
+    def fully_initialize(self):
+        pass
+
+    def get_id(self):
+        return self._sensor_id
+
+    def get_type(self):
+        return self._sensor_type
+
+    def add_data_point(self, data_point):
+        if len(self._data_array) > self._max_data_points:
+            self._data_array.remove(self._data_array[0])
+        self._data_array.append(data_point)
+        self.update_subscribers()
+
+    def get_most_recent_data_point(self):
+        if len(self._data_array) > 0:
+            return self._data_array[-1]
+        else:
+            return None
+
+    def get_most_recent_data_points(self, how_many: int):
+        if how_many >= self._max_data_points:
+            return self._data_array
+        else:
+            return self._max_data_points[0-how_many:-1]
+
+    def change_max_data_points(self, new_max:int):
+        self._max_data_points = new_max
+
+    def update_subscribers(self):
+        for callback in self._subscribers:
+            callback(self._data_array[-1])
+
+    def subscribe(self, callback: callable):
+        self._subscribers.append(callback)
+

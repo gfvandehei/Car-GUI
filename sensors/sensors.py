@@ -2,7 +2,7 @@ from dependency_injector import containers, providers
 from sensors.sensor_manager import SensorManager
 from sensors.sensor_store import SensorStore
 from sensors.sensor_detector_manager import SensorDetectorManager
-from sensors.sensor import Sensor
+from sensors.sensor_network import Sensor
 from core.core import Core
 
 

@@ -2,6 +2,7 @@ import socket
 import struct
 from threading import Thread
 from sensors.sensor_detector import SensorDetector
+from sensors.sensor_network import NetworkSensor
 from core.logger import Logger
 import sys
 
@@ -33,6 +34,7 @@ class NetworkSensorDetector(SensorDetector):
 
             try:
                 sense_id, sense_tcp, sense_type = self.verify_data(data)
+                new_network_sensor = Ne
                 self.fire_connect_event(sense_id, sense_tcp, sense_type, addr)
             except Exception as err:
                 print(err)
@@ -47,3 +49,5 @@ class NetworkSensorDetector(SensorDetector):
             (sense_id, tcp_port, sense_type) = struct.unpack('!IIB', data)
             self.logger.print_debug_msg(5, "id: {} | port: {} | type: {}".format(sense_id, tcp_port, sense_type))
             return sense_id, tcp_port, sense_type
+
+
