@@ -22,6 +22,7 @@ class Sensor(object):
         if len(self._data_array) > self._max_data_points:
             self._data_array.remove(self._data_array[0])
         self._data_array.append(data_point)
+        print(data_point)
         self.update_subscribers()
 
     def get_most_recent_data_point(self):

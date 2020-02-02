@@ -22,7 +22,7 @@ class Broadcaster(object):
 
         self.message = struct.pack('!IIB', self.sense_id, self.tcp_port, self.sense_type)
         self.broadcast_thread = None
-        self.start_broadcast()
+        # self.start_broadcast()
 
     def start_broadcast(self):
         self.logger.print_debug_msg(5, "Broadcast is starting")
@@ -38,7 +38,7 @@ class Broadcaster(object):
             time.sleep(5)
 
     def stop_broadcast(self):
-        self.logger.print_debug_msg("Broadcast is stopping")
+        self.logger.print_debug_msg(5, "Broadcast is stopping")
         self.active_broadcast = False
         if self.broadcast_thread:
             self.broadcast_thread.join()

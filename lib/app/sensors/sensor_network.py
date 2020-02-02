@@ -1,6 +1,7 @@
 import socket
 from lib.app.core.logger import Logger
 from lib.app.sensors.sensor import Sensor
+from threading import Thread
 
 class NetworkSensor(Sensor):
 
@@ -10,7 +11,7 @@ class NetworkSensor(Sensor):
         self.logger = logger
         self.connected_flag = False
         self.tcp_connection: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        
+        self.recv_thread = None
 
     def fully_initialize(self):
         self.tcp_connection.settimeout(5)
@@ -24,11 +25,18 @@ class NetworkSensor(Sensor):
         except Exception as err:
             print(err)
 
+        self.recv_thread = Thread(target=self.read_thread)
+        self.recv_thread.start()
+
     def read_thread(self):
         message = ""
         while self.connected_flag:
             try:
                 data: str = str(self.tcp_connection.recv(15000))
+                print(data)
+                if len(data) == 0:
+                    # disconnect
+                    self.connected_flag = False
                 for i in data:
                     if i == '\n':
                         self.on_network_message(message)
