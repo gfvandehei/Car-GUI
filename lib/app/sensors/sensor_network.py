@@ -3,6 +3,7 @@ from lib.app.core.logger import Logger
 from lib.app.sensors.sensor import Sensor
 from threading import Thread
 
+
 class NetworkSensor(Sensor):
 
     def __init__(self, sensor_id: int, sensor_tcp_port: int, sensor_type: int, address: (str, int), logger: Logger):

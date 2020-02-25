@@ -1,5 +1,6 @@
 from lib.app.sensors.sensors import Sensors
 from lib.app.core.core import Core
+from lib.app.gui.gui import AppGUI
 
 Core.config.override({
     "sensors": {
@@ -13,4 +14,7 @@ Core.config.override({
         "level": 5
     }
 })
-Sensors.sensor_test()
+#print(Core.config.get_name('logging'))
+#Sensors.sensor_manager()
+#Sensors.sensor_test()
+AppGUI().run()

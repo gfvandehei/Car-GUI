@@ -22,8 +22,7 @@ class NetworkSensorNode(containers.DeclarativeContainer):
 
     session_manager = providers.Singleton(SessionManager,
                                           broadcaster=broadcaster,
-                                          data_source=data_source,
-                                          tcp_port=Core.config.client.tcp_port)
+                                          data_source=data_source)
 
     run_network_sensor = providers.Callable(main, session_manager=session_manager)
 

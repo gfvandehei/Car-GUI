@@ -1,0 +1,4 @@
+The GUI application looks for usable apps in a specified directory.
+
+In this directory each "app" should be contained allowing a return of a QWidget in this directory
+with a name of the format __APP__<name>.py

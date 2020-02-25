@@ -1,0 +1,35 @@
+# Sensor Definitions
+this document is a list of all sensors, and what their data is formatted as
+
+## Sensor Detection Message:
+{
+    sid: int,
+    type: int,
+    tcp_port: int
+}
+
+## Climate Sensor:
+[
+    {
+        "information": {
+            "location": "string"
+            "id": "int"
+        },
+        "data": {
+            "temperature", "asd"
+            "humidity", "asd"
+        }
+    }
+]
+
+## Camera
+[
+    {
+        "information": {
+            "location": "string",
+            "description": "string"
+            "resolution": [x, y]
+        },
+        "data": "base64 encoded image"
+    }
+]

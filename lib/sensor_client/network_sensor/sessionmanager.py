@@ -4,17 +4,18 @@ from threading import Thread
 from lib.sensor_client.network_sensor.datasource import DataSource
 import select
 
+
 class SessionManager(object):
 
-    def __init__(self, broadcaster: Broadcaster, data_source: DataSource, tcp_port: int):
+    def __init__(self, broadcaster: Broadcaster, data_source: DataSource):
         self.broadcaster = broadcaster
         self.data_source = data_source
-        self.data_source.subscribe(self.on_data_source)
+
 
         self.tcp_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.tcp_server.setblocking(0)
         self.tcp_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.tcp_server.bind(("", tcp_port))
+        self.tcp_server.bind(("", 0))
 
         bound_port = self.tcp_server.getsockname()[1]
         self.broadcaster.tcp_port = bound_port
@@ -23,8 +24,14 @@ class SessionManager(object):
         self.tcp_server.listen(5)
         self.inputs = [self.tcp_server]
         self.outputs = []
-
+        self.data_source.subscribe(self.on_data_source)
         Thread(target=self.select_loop).start()
+
+    def initialize_socket(self, socket_fd: socket.socket):
+        socket_fd.setblocking(0)
+        socket_fd.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        socket_fd.bind(("", 0))
+        return socket_fd.getsockname()
 
     def select_loop(self):
         while self.inputs:

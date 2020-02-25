@@ -17,7 +17,6 @@ class Sensors(containers.DeclarativeContainer):
                                          logger=Core.logger,
                                          sensor_io_file=Core.config.sensors.storage_file)
 
-
     # different sensor type factories
     network_sensor_factory = providers.DelegatedFactory(NetworkSensor,
                                                         logger=Core.logger)
@@ -39,3 +38,4 @@ class Sensors(containers.DeclarativeContainer):
     sensor_test = providers.Callable(main, s=sensor_storage, s1=sensor_detector_manager, s2=sensor_manager)
 
 
+#SensorContainer = Sensors()
