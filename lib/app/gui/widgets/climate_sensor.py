@@ -3,7 +3,7 @@ from PyQt5.QtCore import Qt
 from numpy import interp
 import numpy as np
 
-class _Tach(QtWidgets.QWidget):
+class _ClimatePainter(QtWidgets.QWidget):
     
     def __init__(self, title: str, start_angle=0, end_angle=270, max_val=256,
                  color: QtGui.QColor=Qt.green, *args, **kwargs):
@@ -38,18 +38,21 @@ class _Tach(QtWidgets.QWidget):
         self.update()
 
 
-class Tacheometer(QtWidgets.QWidget):
+class ClimateSensorDisplay(QtWidgets.QWidget):
     """
     Custom Qt Widget to show a power bar and dial.
     Demonstrating compound and custom-drawn widget.
     """
 
-    def __init__(self, title: str, start_angle=0, end_angle=270, max_val=256,
-                 color: QtGui.QColor=Qt.green, *args, **kwargs):
-        super(Tacheometer, self).__init__(*args, **kwargs)
+    def __init__(self, sensor_name: str, *args, **kwargs):
+        super(ClimateSensorDisplay, self).__init__(*args, **kwargs)
 
         layout = QtWidgets.QVBoxLayout()
-        self._tach = _Tach(title, start_angle, end_angle, max_val, color)
-        layout.addWidget(self._tach)
+        self.sensor_label = QtWidgets.QLabel(sensor_name)
+        layout.addWidget(self.sensor_label)
+        self.sensor_temperature = QtWidgets.QLabel("Temperature: ")
+        self.sensor_humidity = QtWidgets.QLabel("Humidity: ")
+        layout.addWidget(self.sensor_temperature)
+        layout.addWidget(self.sensor_humidity)
 
         self.setLayout(layout)

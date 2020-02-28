@@ -4,6 +4,7 @@ from lib.app.sensors.sensor_manager import SensorManager
 from lib.app.sensors.sensor import Sensor
 from lib.app.gui.widgets.tachiometer import Tacheometer
 #from lib.app.gui.controllers.screencontroller import ScreenController
+from lib.app.gui.widgets.climate_sensor import ClimateSensorDisplay
 
 class ClimateApp(QWidget):
     def __init__(self, parent=None):
@@ -15,7 +16,7 @@ class ClimateApp(QWidget):
         self.my_layout = QVBoxLayout()
         self.no_sensor_label = QLabel("No Sensor Data Available")
         self.my_layout.addWidget(self.no_sensor_label)
-        self.tachiometer = Tacheometer()
+        #self.tachiometer = Tacheometer("MPH", max_val=100)
         self.my_layout.addWidget(self.tachiometer)
         self.setLayout(self.my_layout)
 
