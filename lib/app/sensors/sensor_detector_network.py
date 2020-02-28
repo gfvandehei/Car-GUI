@@ -4,7 +4,9 @@ from threading import Thread
 from lib.app.sensors.sensor_detector import SensorDetector
 from lib.app.core.logger import Logger
 from dependency_injector.providers import DelegatedFactory
-
+from lib.app.sensors.sensor_datapipe_network import SensorDatapipeNetwork
+from lib.app.sensors.sensor_types.climate_sensor import ClimateSensor
+from lib.app.sensors.sensor import Sensor
 
 class NetworkSensorDetector(SensorDetector):
     """
@@ -40,8 +42,14 @@ class NetworkSensorDetector(SensorDetector):
             try:
                 sense_id, sense_tcp, sense_type = self.verify_data(data)
                 print("Got sense_id thing")
-                new_network_sensor = self.network_sensor_factory(sense_id, sense_tcp, sense_type, address)
-                self.fire_connect_event(new_network_sensor)
+                datapipe = SensorDatapipeNetwork(address, sense_tcp)
+                new_sensor = None
+                if sense_type == 1:  # climate sensor
+                    new_sensor = ClimateSensor(sense_id, datapipe)
+                else:
+                    sensor = Sensor(sense_id)
+                #new_network_sensor = self.network_sensor_factory(sense_id, sense_tcp, sense_type, address)
+                self.fire_connect_event(new_sensor)
             except Exception as err:
                 self.logger.print_error_message(1, err)
                 continue

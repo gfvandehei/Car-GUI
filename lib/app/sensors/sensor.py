@@ -1,9 +1,8 @@
 class Sensor(object):
 
-    def __init__(self, sensor_id: int, sensor_type: int):
+    def __init__(self, sensor_id: int):
         self._sensor_id = sensor_id
-        self._sensor_type = sensor_type
-
+        self._sensor_type = "Base"
         self._data_array = []
         self._max_data_points = 200
 
