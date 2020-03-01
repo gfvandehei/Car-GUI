@@ -17,7 +17,8 @@ class ClimateApp(QWidget):
         self.no_sensor_label = QLabel("No Sensor Data Available")
         self.my_layout.addWidget(self.no_sensor_label)
         #self.tachiometer = Tacheometer("MPH", max_val=100)
-        self.my_layout.addWidget(self.tachiometer)
+        self.climate_sensor = ClimateSensorDisplay("Climate 1")
+        self.my_layout.addWidget(self.climate_sensor)
         self.setLayout(self.my_layout)
 
         self.show_climate_sensors()

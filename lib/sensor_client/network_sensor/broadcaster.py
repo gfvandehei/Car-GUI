@@ -20,12 +20,13 @@ class Broadcaster(object):
         self.broadcaster_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         self.broadcaster_socket.bind(('', broadcast_port))
 
-        self.message = struct.pack('!IIB', self.sense_id, self.tcp_port, self.sense_type)
+        self.message = None 
         self.broadcast_thread = None
         # self.start_broadcast()
 
     def start_broadcast(self):
         self.logger.print_debug_msg(5, "Broadcast is starting")
+        self.message = struct.pack('!IIB', self.sense_id, self.tcp_port, self.sense_type)
         if self.broadcast_thread:
             return
         self.active_broadcast = True

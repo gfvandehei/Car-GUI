@@ -20,5 +20,5 @@ class SensorDetector(object):
     
     def fire_connect_event(self, sensor: Sensor):
         for callback in self.on_connect_callbacks:
-            print("Calling callback", callback)
+            #print("Calling callback", callback)
             callback(sensor)

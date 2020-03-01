@@ -33,6 +33,7 @@ class NetworkSensorDetector(SensorDetector):
         run_thread.start()
 
     def run(self):
+        print("Receiving Sensor Broadcasts")
         while not self.end_f:
             try:
                 data, address = self.socket_fd.recvfrom(15000)
@@ -42,12 +43,12 @@ class NetworkSensorDetector(SensorDetector):
             try:
                 sense_id, sense_tcp, sense_type = self.verify_data(data)
                 print("Got sense_id thing")
-                datapipe = SensorDatapipeNetwork(address, sense_tcp)
+                datapipe = SensorDatapipeNetwork(address[0], sense_tcp)
                 new_sensor = None
                 if sense_type == 1:  # climate sensor
                     new_sensor = ClimateSensor(sense_id, datapipe)
                 else:
-                    sensor = Sensor(sense_id)
+                    new_sensor = Sensor(sense_id)
                 #new_network_sensor = self.network_sensor_factory(sense_id, sense_tcp, sense_type, address)
                 self.fire_connect_event(new_sensor)
             except Exception as err:

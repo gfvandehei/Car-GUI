@@ -18,6 +18,7 @@ class SessionManager(object):
         self.tcp_server.bind(("", 0))
 
         bound_port = self.tcp_server.getsockname()[1]
+        print("PORT BOUND", bound_port)
         self.broadcaster.tcp_port = bound_port
         self.broadcaster.start_broadcast()
 
@@ -56,7 +57,7 @@ class SessionManager(object):
                     print("Received data {}".format(data))
 
     def on_data_source(self, data: list):
-        print("On_data_source")
+        #print("On_data_source")
         for i in self.inputs:
             if i == self.tcp_server:
                 continue
@@ -68,6 +69,6 @@ class SessionManager(object):
             print(message, counter)
             if counter > 0:
                 message = message[0:-1]
-                message += "\n"
+                message += "\r\n"
                 flag = i.send(bytes(message, 'utf-8'))
                 print(flag)
