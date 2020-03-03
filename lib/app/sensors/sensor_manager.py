@@ -1,8 +1,9 @@
 from lib.app.sensors.sensor_detector_manager import SensorDetectorManager
 from lib.app.core.logger import Logger
 from lib.app.sensors.sensor import Sensor
+from lib.common.singleton import Singleton
 
-
+@Singleton
 class SensorManager(object):
 
     def __init__(self, sensor_detector: SensorDetectorManager, logger: Logger):
@@ -18,3 +19,6 @@ class SensorManager(object):
             new_sensor.fully_initialize()
         else:
             self.logger.print_debug_msg(5, "Received a request for an already existing sensor to be created")
+
+    def retrieve_sensor()
+    
