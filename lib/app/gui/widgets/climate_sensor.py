@@ -56,3 +56,7 @@ class ClimateSensorDisplay(QtWidgets.QWidget):
         layout.addWidget(self.sensor_humidity)
 
         self.setLayout(layout)
+
+    def on_values(self, temp, hum):
+        self.sensor_temperature.setText(str(temp))
+        self.sensor_humidity.setText(str(hum))

@@ -37,9 +37,13 @@ class Sensor(object):
 
     def update_subscribers(self):
         for callback in self._subscribers:
-            callback(self._data_array[-1])
-
+            try:
+                callback(self._data_array[-1])
+            except:
+                self._subscribers.remove(callback)
+                
     def subscribe(self, callback: callable):
+        print("Added a sub")
         self._subscribers.append(callback)
 
     def receive_update(self, data_raw):

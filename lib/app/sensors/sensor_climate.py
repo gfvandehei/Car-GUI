@@ -2,10 +2,6 @@ from lib.app.sensors.sensor import Sensor
 import struct
 
 class ClimateSensor(Sensor):
-
-    def __init__(self, sid):
-        super().__init__(sid)
-        self.image_fragment = b''
         
     def receive_update(self, raw_data: bytes):
         """

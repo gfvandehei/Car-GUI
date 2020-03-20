@@ -8,7 +8,7 @@ class FakeClimateDetector(Thread):
 
     def __init__(self, time_interval: int=1, host_port: int=8080):
         super().__init__()
-        self.my_id = random.randint(0, 100)
+        self.my_id = 1
         self.interval = time_interval
         self.host_port = host_port
 

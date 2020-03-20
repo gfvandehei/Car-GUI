@@ -33,7 +33,7 @@ class SensorFactory(object):
     @classmethod
     def post_sensor_update(cls, message_data: bytes):
         sensor_id, sensor_type = struct.unpack("!IH", message_data[0:6])
-        print("DEBUG: message", sensor_id, sensor_type)
+        #print("DEBUG: message", sensor_id, sensor_type)
 
         if cls._sensors.get(sensor_id) is not None:
             sensor: Sensor = cls._sensors.get(sensor_id)

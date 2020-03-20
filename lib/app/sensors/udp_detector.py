@@ -22,7 +22,7 @@ class UDPDetector(Thread):
         while self.run_f:
             try:
                 data, address = self.listening_socket.recvfrom(16000)
-                print("Received message from {}", address)
+                #print("Received message from {}", address)
                 SensorFactory.post_sensor_update(data)
             except socket.timeout:
                 continue
