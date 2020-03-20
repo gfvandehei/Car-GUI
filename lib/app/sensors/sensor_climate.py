@@ -10,5 +10,5 @@ class ClimateSensor(Sensor):
         """
         DATA FORMAT: Temperature(f)(float) | Humidity(bar)(float)  
         """
-        temperature_f, humidity_b = struct.unpack("!HH", raw_data)
+        temperature_f, humidity_b = struct.unpack("!ff", raw_data)
         self.add_data_point([temperature_f, humidity_b])

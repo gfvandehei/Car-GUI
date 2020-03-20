@@ -38,15 +38,16 @@ class SensorFactory(object):
 
         if cls._sensors.get(sensor_id) is not None:
             sensor: Sensor = cls._sensors.get(sensor_id)
-            sensor.receive_update(message_data)
+            sensor.receive_update(message_data[6:])
         else:
             switch = {
                 1: ClimateSensor
             }
-            sensor_class = switch.get(sensor_type, default=Sensor)
+            sensor_class = switch.get(sensor_type, Sensor)
             if sensor_class is Sensor:
                 print("Received update from sensor of type {} which does not yet exist".format(sensor_type))
                 print("using default sensor")
             new_sensor = sensor_class(sensor_id)
             print("DEBUG: created sensor", new_sensor)
+            cls._sensors[sensor_id] = new_sensor
             cls._trigger_await(sensor_id, new_sensor)

@@ -11,11 +11,11 @@ class UDPDetector(Thread):
         self.run_f = False
 
         # set up socket
-        self.listening_socket: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.listening_socket= socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.listening_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.listening_socket.setsockopt(socket.SOL_SOCKET,socket.SO_BROADCAST, 1)
         self.listening_socket.settimeout(1)
-        self.listening_socket.bind((0, port))
+        self.listening_socket.bind(("", port))
 
     def run(self):
         self.run_f = True
