@@ -1,6 +1,6 @@
 import struct
 from lib.app.sensors.sensor import Sensor
-from lib.app.sensor.climatesensor import ClimateSensor
+from lib.app.sensors.sensor_climate import ClimateSensor
 
 
 class SensorFactory(object):
@@ -43,10 +43,10 @@ class SensorFactory(object):
             switch = {
                 1: ClimateSensor
             }
-            sensor_class = switch.get(sensor_type, default=None)
-            if sensor_class is None:
+            sensor_class = switch.get(sensor_type, default=Sensor)
+            if sensor_class is Sensor:
                 print("Received update from sensor of type {} which does not yet exist".format(sensor_type))
-                return
+                print("using default sensor")
             new_sensor = sensor_class(sensor_id)
             print("DEBUG: created sensor", new_sensor)
             cls._trigger_await(sensor_id, new_sensor)

@@ -1,8 +1,7 @@
 class Sensor(object):
 
-    def __init__(self, sensor_id: int, sensor_type: int):
+    def __init__(self, sensor_id: int):
         self._sensor_id = sensor_id
-        self._sensor_type = sensor_type
 
         self._data_array = []
         self._max_data_points = 200
@@ -14,9 +13,6 @@ class Sensor(object):
 
     def get_id(self):
         return self._sensor_id
-
-    def get_type(self):
-        return self._sensor_type
 
     def add_data_point(self, data_point):
         if len(self._data_array) > self._max_data_points:
@@ -46,4 +42,7 @@ class Sensor(object):
 
     def subscribe(self, callback: callable):
         self._subscribers.append(callback)
+
+    def receive_update(self, data_raw):
+        self.add_data_point(data_raw)
 
