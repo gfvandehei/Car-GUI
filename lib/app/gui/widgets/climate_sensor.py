@@ -1,42 +1,11 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
+from pyqtgraph import PlotWidget, plot
+import pyqtgraph as pg
 from numpy import interp
 import numpy as np
-
-class _ClimatePainter(QtWidgets.QWidget):
-    
-    def __init__(self, title: str, start_angle=0, end_angle=270, max_val=256,
-                 color: QtGui.QColor=Qt.green, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.start_angle = start_angle
-        self.potential_span = end_angle
-        self.max_value = max_val
-        self.color = Qt.green
-        self.title = title
-        self.setSizePolicy(
-            QtWidgets.QSizePolicy.MinimumExpanding,
-            QtWidgets.QSizePolicy.MinimumExpanding
-        )
-
-        self.value = 0
-
-    def sizeHint(self):
-        return QtCore.QSize(600, 600)
-
-    def paintEvent(self, e):
-        painter = QtGui.QPainter(self)
-        painter.setPen(QtGui.QPen(self.color, 10, Qt.SolidLine))
-        painter.setBrush(QtCore.Qt.NoBrush)
-        painter.drawArc(0, 0, self.geometry().width()-40, self.geometry().height()-40, self.start_angle,  self.value*-16)
-        painter.drawText(e.rect(), Qt.AlignCenter, self.title+"\n"+str(self.value))
-        painter.end()
-
-    def _trigger_refresh(self, value: int):
-        self.value = value % 256
-        self.value = np.floor(np.interp(value, [0, self.max_value], [self.start_angle, self.potential_span]))
-        print(value, self.max_value, self.start_angle)
-        self.update()
-
+import math
+from lib.app.gui.widgets.climategraph import PlotCanvas
 
 class ClimateSensorDisplay(QtWidgets.QWidget):
     """
@@ -47,16 +16,51 @@ class ClimateSensorDisplay(QtWidgets.QWidget):
     def __init__(self, sensor_name: str, *args, **kwargs):
         super(ClimateSensorDisplay, self).__init__(*args, **kwargs)
 
-        layout = QtWidgets.QVBoxLayout()
-        self.sensor_label = QtWidgets.QLabel(sensor_name)
-        layout.addWidget(self.sensor_label)
-        self.sensor_temperature = QtWidgets.QLabel("Temperature: ")
-        self.sensor_humidity = QtWidgets.QLabel("Humidity: ")
-        layout.addWidget(self.sensor_temperature)
-        layout.addWidget(self.sensor_humidity)
-
+        layout = QtWidgets.QGridLayout()
         self.setLayout(layout)
+        self.hum_plot_vals = []
+        self.temp_plot_vals = []
+        self.skip = 20
+        #top row
+        self.sensor_label = QtWidgets.QLabel(sensor_name)
+        layout.addWidget(self.sensor_label, 0, 0, 1, 4)
+
+        #second row
+        self.temp_image = QtWidgets.QLabel("ASD")
+        pixmap = QtGui.QPixmap('./resources/temperature.png')
+        self.temp_image.setScaledContents(True)
+        self.temp_image.setSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Ignored)
+        self.temp_image.setPixmap(pixmap)
+        self.sensor_temperature = QtWidgets.QLCDNumber()
+        layout.addWidget(self.temp_image, 1, 0)
+        layout.addWidget(self.sensor_temperature, 1, 1)
+        
+
+        #3rd row
+        self.hum_image = QtWidgets.QLabel("ASDf")
+        pixmap_h = QtGui.QPixmap('./resources/humidity.png')
+        self.hum_image.setPixmap(pixmap_h)
+        self.hum_image.setScaledContents(True)
+        self.hum_image.setSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Ignored)
+        self.hum_image.setPixmap(pixmap_h)
+        self.sensor_humidity = QtWidgets.QLCDNumber()
+        self.sensor_humidity.setDecMode()
+        layout.addWidget(self.hum_image, 2, 0)
+        layout.addWidget(self.sensor_humidity, 2, 1,)
+
+        self.graphwidget = PlotCanvas()
+        layout.addWidget(self.graphwidget, 3, 0, 4, 4)
+
 
     def on_values(self, temp, hum):
-        self.sensor_temperature.setText(str(temp))
-        self.sensor_humidity.setText(str(hum))
+        self.sensor_temperature.display(temp)
+        self.sensor_humidity.display(hum)
+        #self.sensor_temperature.setText(str(temp))
+        #self.sensor_humidity.setText(str(hum))
+        
+        pen1 = pg.mkPen(color='r')
+        pen2 = pg.mkPen(color='b')
+        time_arr = range(60)
+        self.temp_plot_vals.append(temp)
+        self.hum_plot_vals.append(hum)
+        self.graphwidget.plot(self.temp_plot_vals, self.hum_plot_vals)

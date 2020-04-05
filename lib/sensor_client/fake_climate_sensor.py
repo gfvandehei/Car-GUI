@@ -3,12 +3,12 @@ from threading import Thread
 import struct
 import random
 import time
-
+import sys
 class FakeClimateDetector(Thread):
 
-    def __init__(self, time_interval: int=1, host_port: int=8080):
+    def __init__(self, mid=1, time_interval: int=1, host_port: int=8080):
         super().__init__()
-        self.my_id = 1
+        self.my_id = mid
         self.interval = time_interval
         self.host_port = host_port
 
@@ -30,4 +30,5 @@ class FakeClimateDetector(Thread):
             self.sockfd.close()
             exit(0)
 
-FakeClimateDetector().start()
+ida = int(sys.argv[1])
+FakeClimateDetector(mid=ida).start()

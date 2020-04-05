@@ -5,7 +5,11 @@ from lib.app.gui.controllers.screencontroller import ScreenController
 import sys
 
 if __name__ == "__main__":
-    UDPDetector(8080).start()
-    app = QApplication(sys.argv)
-    screen_controller: ScreenController = ScreenController()
-    sys.exit(app.exec_())
+    try:
+        UDPDetector(8080).start()
+        app = QApplication(sys.argv)
+        screen_controller: ScreenController = ScreenController()
+        sys.exit(app.exec_())
+    except KeyboardInterrupt:
+        app.exit()
+
