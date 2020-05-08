@@ -1,6 +1,7 @@
 import struct
 from lib.app.sensors.sensor import Sensor
-from lib.app.sensors.sensor_climate import ClimateSensor
+from lib.app.sensors.sensor_types.climate_sensor import ClimateSensor
+from lib.app.sensors.sensor_types.camera_sensor import CameraSensor
 
 class SensorFactory(object):
 
@@ -41,6 +42,7 @@ class SensorFactory(object):
         else:
             switch = {
                 1: ClimateSensor,
+                2: CameraSensor
             }
             sensor_class = switch.get(sensor_type, Sensor)
             if sensor_class is Sensor:

@@ -27,7 +27,7 @@ class BaseSensor(Thread):
         try:
             while True:
                 message = self.send_message_queue.get()
-                print("Message length", len(message))
+                #print("Message length", len(message))
                 self.sockfd.sendto(message, ("<broadcast>", self.host_port))
         except KeyboardInterrupt:
             self.sockfd.close()
