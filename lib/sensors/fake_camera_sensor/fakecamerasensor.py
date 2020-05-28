@@ -9,6 +9,8 @@ import json
 import select
 import pickle
 import struct 
+
+
 class FakeCameraSensor(BaseSensor):
 
     def __init__(self, image_file: str, port: int, *args):

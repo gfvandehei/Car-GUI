@@ -32,7 +32,9 @@ class CameraSensor(Sensor):
     def append_image_bytes(self, image_bytes: bytes):
         frame = pickle.loads(image_bytes, fix_imports=True, encoding="bytes")
         frame = cv2.imdecode(frame, cv2.IMREAD_COLOR)
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         #print(frame.shape[0], frame.shape[1])
+        print("IMAGE")
         self.img_cv2 = frame
         #print(len(base_64_decode))
         #cv2.imshow("image", frame)
@@ -44,10 +46,12 @@ class CameraSensor(Sensor):
             while len(data_msg) < payload_size:
                 #print("Recv: {}".format(len(data_msg)))
                 data_msg = self.data_socket.recv(4096)
+                #print(data_msg)
             
             packed_msg_size = data_msg[:payload_size]
             data_msg = data_msg[payload_size:]
             msg_size = struct.unpack(">L", packed_msg_size)[0]
+            #print(msg_size)
             #print("msg_size: {}".format(msg_size))
             while len(data_msg) < msg_size:
                 data_msg += self.data_socket.recv(4096)

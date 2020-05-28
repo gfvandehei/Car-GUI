@@ -53,11 +53,12 @@ class SingleCameraApp(QWidget):
             frame = camera.get_current_image()
             if frame is not None:
                 h, w, ch = frame.shape
+                print(h, w, ch)
                 bytesPerLine = ch * w
                 convertToQtFormat = QImage(frame.data, w, h, bytesPerLine, QImage.Format_RGB888)
-                p = convertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
-                self.label.setPixmap(QPixmap.fromImage(p))
-
+                #p = convertToQtFormat.scaled(h, w, Qt.KeepAspectRatio)
+                self.label.setPixmap(QPixmap.fromImage(convertToQtFormat))
+                time.sleep(1/60)
     """def setImage(self, image):
         self.label.setPixmap(QPixmap.fromImage(image))"""
 
