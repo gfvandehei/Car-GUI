@@ -3,45 +3,57 @@ import socket
 import json
 from threading import Thread
 import base64
-
+import cv2
+import struct
+import numpy as np
+import pickle
 class CameraSensor(Sensor):
 
-    def __init__(self):
+    def __init__(self, sensor_id: str):
+        super().__init__(sensor_id)
         self.data_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.data_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
         self.data_transfer_addr = None
-        self.img_bytes = b''
+        self.img_cv2 = None
+
+    def get_current_image(self):
+        return self.img_cv2
 
     def connect_tcp(self):
         try:
             self.data_socket.connect(self.data_transfer_addr)
+            print("Connected")
             Thread(target=self.recv_image_thread).start()
         except Exception as err:
             self.data_transfer_addr = None
             print(err)
 
     def append_image_bytes(self, image_bytes: bytes):
-        base_64_raw = image_bytes.decode('utf-8')
-        base_64_decode = base64.b64decode(base_64_raw)
-        print(base_64_decode)
+        frame = pickle.loads(image_bytes, fix_imports=True, encoding="bytes")
+        frame = cv2.imdecode(frame, cv2.IMREAD_COLOR)
+        #print(frame.shape[0], frame.shape[1])
+        self.img_cv2 = frame
+        #print(len(base_64_decode))
+        #cv2.imshow("image", frame)
 
     def recv_image_thread(self):
         data_msg = b''
+        payload_size = struct.calcsize(">L")
         while True:
-            data = self.data_socket.recv(1024)
-            if len(data) == 0:
-                # disconnected
-                return
-
-            index = data.find("\n")
-            while index > 0:
-                data_msg += data[:index]
-                # data_msg contains image bytes
-                if index != len(data)-1:
-                    data = data[index+1:]
-                index = data.find("\n")
-                self.append_image_bytes(data_msg)
+            while len(data_msg) < payload_size:
+                #print("Recv: {}".format(len(data_msg)))
+                data_msg = self.data_socket.recv(4096)
+            
+            packed_msg_size = data_msg[:payload_size]
+            data_msg = data_msg[payload_size:]
+            msg_size = struct.unpack(">L", packed_msg_size)[0]
+            #print("msg_size: {}".format(msg_size))
+            while len(data_msg) < msg_size:
+                data_msg += self.data_socket.recv(4096)
+            frame_data = data_msg[:msg_size]
+            data_msg = data_msg[msg_size:]
+            self.append_image_bytes(frame_data)
 
     def parse_data(self, message: bytes):
         print("Parsing message ", message)

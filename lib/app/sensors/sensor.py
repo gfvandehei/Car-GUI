@@ -49,3 +49,6 @@ class Sensor(object):
     def receive_update(self, data_raw):
         self.add_data_point(data_raw)
 
+    def parse_data(self, data: bytes):
+        pass
+

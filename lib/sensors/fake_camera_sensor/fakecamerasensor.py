@@ -7,7 +7,8 @@ import time
 from threading import Thread
 import json
 import select
-
+import pickle
+import struct 
 class FakeCameraSensor(BaseSensor):
 
     def __init__(self, image_file: str, port: int, *args):
@@ -17,8 +18,10 @@ class FakeCameraSensor(BaseSensor):
         self.server_port = port
         
         image = cv2.imread(image_file)
-        retval, buffer = cv2.imencode('.jpg', image)
-        self.img_as_text = base64.b64encode(buffer)
+        encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
+        retval, buffer = cv2.imencode('.jpg', image, encode_param)
+        self.img_as_text = pickle.dumps(buffer, 0)
+        self.img_size = len(self.img_as_text)
         # start server
         self.tcp_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.tcp_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -36,7 +39,7 @@ class FakeCameraSensor(BaseSensor):
             for i in self.clients:
                 if i == self.tcp_server:
                     continue
-                i.sendall(self.img_as_text)
+                i.sendall(struct.pack(">L",self.img_size) + self.img_as_text)
                 print("sent")
 
             # 60 fps

@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QStatusBar
 from PyQt5.QtWidgets import QToolBar
 from PyQt5.QtWidgets import QWidget
 from lib.app.gui.apps.climateapp import ClimateApp
+from lib.app.gui.apps.singlecameraapp import SingleCameraApp
 #from lib.app.gui.controllers.screencontroller import ScreenController
 
 class AppScreen(QWidget):
@@ -20,7 +21,8 @@ class AppScreen(QWidget):
         self.grid_layout = QGridLayout()
         self.setLayout(self.grid_layout)
         self.apps = {
-            "Climate Sensors": ClimateApp
+            "Climate Sensors": ClimateApp,
+            "Camera": SingleCameraApp
         }
         self.buttons = []
         self.load_buttons()
