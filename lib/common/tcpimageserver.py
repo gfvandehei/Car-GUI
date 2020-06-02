@@ -26,6 +26,41 @@ class TCPImageServer(Thread):
         self.tcp_server.listen()
         self.inputs.append(self.tcp_server)
 
+    def connect_client(self):
+        conn, addr = self.tcp_server.accept()
+        conn.setblocking(0)
+        self.inputs.append(conn)
+        self.outputs.append(conn)
+        self.msg_queues[conn] = Queue(10)
+        print("A new client {} has connected".format(addr))
+    
+    def disconnect_client(self, descriptor: socket.socket):
+        try:
+            self.inputs.remove(descriptor)
+            self.outputs.remove(descriptor)
+            del self.msg_queues[descriptor]
+            descriptor.close()
+            print("Client", descriptor, "disconnected")
+        except Exception as err:
+            print("There was an exception on client disconnect", err)
+
+    def register_commandable(self, commandable: Commandable):
+        self.on_command_callbacks.append(commandable)
+
+    def handle_command(self, command: bytes):
+        # parse command
+        # send command on to each commandable
+        for commandable in self.on_command_callbacks:
+            commandable.recv_command(command)
+
+    def on_message(self, descriptor: socket.socket):
+        client_recv = descriptor.recv(1024)
+        if len(client_recv) == 0:
+            self.disconnect_client(descriptor)
+            return
+
+        self.handle_command(client_recv)
+
     def run(self):
         while not self.end_f:
             read, write, exept = select.select(self.inputs, self.outputs, self.inputs)
@@ -33,40 +68,33 @@ class TCPImageServer(Thread):
             for i in read:
                 if i is self.tcp_server:
                     # there was a new connection
-                    new_client, cli_addr = i.accept()
-                    new_client.setblocking(0)
-                    self.inputs.append(new_client)
-                    self.outputs.append(new_client)
-                    self.msg_queues[new_client] = Queue(10)
-                    print("Client {} connected".format(cli_addr))
+                    self.connect_client()
                 else:
                     # a client sent a command:
-                    client_message = i.recv(1024)
-                    if client_message:
-                        print("Recv:", client_message)
-                    else:
-                        self.inputs.remove(i)
-                        self.outputs.remove(i)
-                        i.close()
-                        del self.msg_queues[i]
+                    try:
+                        self.on_message(i)
+                    except Exception as err:
+                        print("Error on_message():", err)
+                        continue
 
             for i in write:
-                try:
-                    next_msg = self.msg_queues[i].get_nowait()
-                except Empty:
-                    continue
-                    #self.outputs.remove(i)
-                else:
-                    #print(next_msg)
-                    i.send(next_msg)
+                if i in self.inputs:
+                    try:
+                        next_msg = self.msg_queues[i].get_nowait()
+                    except Empty:
+                        continue
+                        #self.outputs.remove(i)
+                    else:
+                        #print(next_msg)
+                        i.send(next_msg)
 
             for i in exept:
                 self.inputs.remove(i)
                 if i in self.outputs:
                     self.outputs.remove(i)
-                i.close()
                 print("Socket {} closed with exeption".format(i))
                 del self.msg_queues[i]
+                i.close()
 
 
     def send_image(self, image):
@@ -77,11 +105,3 @@ class TCPImageServer(Thread):
             q: Queue = self.msg_queues[i]
             q.put(message)
 
-    def register_commandable(self, commandable: Commandable):
-        self.on_command_callbacks.append(commandable)
-
-    def handle_command(self, command):
-        # parse command
-        # send command on to each commandable
-        for commandable in self.on_command_callbacks:
-            commandable.send_command(command)

@@ -1,4 +1,4 @@
 class Commandable(object):
 
-    def send_command(self, command):
+    def recv_command(self, command):
         pass

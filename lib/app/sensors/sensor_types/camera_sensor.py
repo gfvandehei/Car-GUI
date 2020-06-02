@@ -20,6 +20,14 @@ class CameraSensor(Sensor):
     def get_current_image(self):
         return self.img_cv2
 
+    def pause(self):
+        command = struct.pack("!B", 1)
+        self.data_socket.send(command)
+
+    def play(self):
+        command = struct.pack("!B", 2)
+        self.data_socket.send(command)
+
     def connect_tcp(self):
         try:
             self.data_socket.connect(self.data_transfer_addr)

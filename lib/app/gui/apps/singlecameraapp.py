@@ -39,8 +39,8 @@ class SingleCameraApp(QWidget):
         self.setLayout(self.my_layout)
         self.th = None
         self.label = QLabel(self)
+        self.label
         self.label.resize(640, 480)
-
         SensorFactory.await_sensor(1, self.camera_connect)
         #SensorFactory.await_sensor(2, self.set_climate_sensor_exterior)
 
@@ -59,6 +59,7 @@ class SingleCameraApp(QWidget):
                 #p = convertToQtFormat.scaled(h, w, Qt.KeepAspectRatio)
                 self.label.setPixmap(QPixmap.fromImage(convertToQtFormat))
                 time.sleep(1/60)
+
     """def setImage(self, image):
         self.label.setPixmap(QPixmap.fromImage(image))"""
 
