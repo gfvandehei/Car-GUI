@@ -10,6 +10,10 @@ import struct
 import json
 from lib.common.commandable import Commandable
 
+"""
+CameraSensor: The base remote sensor class, allowing viewing of camera feed,
+              and control of camera
+"""
 class CameraSensor(BaseSensor, Commandable):
     
     def __init__(self, port: int, *args):
@@ -18,13 +22,20 @@ class CameraSensor(BaseSensor, Commandable):
         self.end_f = False
         self.server_port = port
         self.paused_f = False
+        # create server for image clients to attach to
         self.my_server = TCPImageServer(self.server_port)
+        # create camera to access system camera
         self.camera = Camera()
+        # create thread to breadcast self: TODO: add class that does this
         self.sensor_msg_t = Thread(target= self.sensor_msg_thread)
-
+        # listen for images from camera
         self.camera.register_listener(self)
+        # listen for commands from tcp clients
         self.my_server.register_commandable(self)
 
+    """
+    on_image: handles what to do when an image is received an image is thrown through the callback
+    """
     def on_image(self, image):
         # encode image
         encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
@@ -34,14 +45,15 @@ class CameraSensor(BaseSensor, Commandable):
         # pass image to server
         self.my_server.send_image(img_as_text)
 
+    """
+    sensor_msg_thread: sends the periodic message broadcasting sensor information
+    TODO: Replace with standardized class as all sensors need to do this
+    """
     def sensor_msg_thread(self):
         while not self.end_f:
-            #for i in self.split_image():
-                #self.send_message(i)
-            #time.sleep(1/60)
             message = {"data_addr": "localhost", "data_port": self.server_port}
             self.send_message(json.dumps(message).encode("utf-8"))
-            time.sleep(1/60)
+            time.sleep(1)
 
     def run(self):
         self.my_server.start()
