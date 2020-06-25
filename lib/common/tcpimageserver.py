@@ -4,6 +4,7 @@ import select
 from queue import Queue, Empty
 from threading import Thread
 import struct
+import base64
 
 class TCPImageServer(Thread):
     def __init__(self, port):
@@ -98,10 +99,11 @@ class TCPImageServer(Thread):
 
 
     def send_image(self, image):
-        img_len = len(image)
-        message = struct.pack(">L",img_len) + image
+        img = base64.b64encode(image)
+        #img_len = len(image)
+        #message = struct.pack(">L",img_len) + image
         for i in self.msg_queues:
             #print("Here!")
             q: Queue = self.msg_queues[i]
-            q.put(message)
+            q.put(img+b'\n')
 

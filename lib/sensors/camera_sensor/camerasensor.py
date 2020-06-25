@@ -9,6 +9,7 @@ import time
 import struct
 import json
 from lib.common.commandable import Commandable
+import base64
 
 """
 CameraSensor: The base remote sensor class, allowing viewing of camera feed,
@@ -40,10 +41,9 @@ class CameraSensor(BaseSensor, Commandable):
         # encode image
         encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
         retval, buffer = cv2.imencode(".jpg", image, encode_param)
-        img_as_text = pickle.dumps(buffer, 0)
-
+        #img_as_text = pickle.dumps(buffer, 0)
         # pass image to server
-        self.my_server.send_image(img_as_text)
+        self.my_server.send_image(buffer)
 
     """
     sensor_msg_thread: sends the periodic message broadcasting sensor information
