@@ -13,25 +13,22 @@ from lib.app.gui.apps.singlecameraapp import SingleCameraApp
 
 class AppScreen(QWidget):
 
-    def __init__(self, parent=None):
-        print("Parent: ", parent)
-        super().__init__(parent=parent)
-        self.myparent = parent
-        self.screen_controller = parent
-        self.grid_layout = QGridLayout()
-        self.setLayout(self.grid_layout)
-        self.apps = {
-            "Climate Sensors": ClimateApp,
-            "Camera": SingleCameraApp
-        }
-        self.buttons = []
-        self.load_buttons()
-        
+    def __init__(self, navigate):
+        super().__init__()
+       
+        self.navigate: callable = navigate
+        print(navigate)
 
-    def load_buttons(self):
-        for i, name in enumerate(self.apps):
-            new_button = QPushButton(name)
-            new_button_f = lambda: self.screen_controller.change_screen(self.apps[name](parent=self.myparent)) 
-            new_button.clicked.connect(new_button_f)
-            self.grid_layout.addWidget(new_button, i, 0)
-            self.buttons.append(new_button)
+        grid_layout = QGridLayout(self)
+
+        climateButton = QPushButton(self)
+        climateButton.clicked.connect(lambda: self.navigate(1))
+        rearCamera = QPushButton(self)
+        rearCamera.clicked.connect(lambda: self.navigate(2))
+
+        grid_layout.addWidget(climateButton, 0, 0)
+        grid_layout.addWidget(rearCamera, 0, 1)
+
+        self.setLayout(grid_layout)
+
+    

@@ -7,6 +7,7 @@ import cv2
 import struct
 import numpy as np
 import pickle
+
 class CameraSensor(Sensor):
 
     def __init__(self, sensor_id: str):
@@ -38,7 +39,7 @@ class CameraSensor(Sensor):
             print(err)
 
     def append_image_bytes(self, image_bytes: bytes):
-        frame = pickle.loads(image_bytes, fix_imports=True, encoding="bytes")
+        frame = base64.b64decode(image_bytes)
         frame = cv2.imdecode(frame, cv2.IMREAD_COLOR)
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         #print(frame.shape[0], frame.shape[1])
@@ -49,23 +50,21 @@ class CameraSensor(Sensor):
 
     def recv_image_thread(self):
         data_msg = b''
-        payload_size = struct.calcsize(">L")
         while True:
-            while len(data_msg) < payload_size:
-                #print("Recv: {}".format(len(data_msg)))
-                data_msg = self.data_socket.recv(4096)
-                #print(data_msg)
-            
-            packed_msg_size = data_msg[:payload_size]
-            data_msg = data_msg[payload_size:]
-            msg_size = struct.unpack(">L", packed_msg_size)[0]
-            #print(msg_size)
-            #print("msg_size: {}".format(msg_size))
-            while len(data_msg) < msg_size:
-                data_msg += self.data_socket.recv(4096)
-            frame_data = data_msg[:msg_size]
-            data_msg = data_msg[msg_size:]
-            self.append_image_bytes(frame_data)
+            data = self.data_socket.recv(4096)
+            index = data.find(b'\n')
+            if index > -1:
+                while index != -1:
+                    data_msg = data_msg+data[:index]
+                    self.append_image_bytes(data_msg)
+                    if index != len(data):
+                        data = data[index+1:]
+                    else: 
+                        data = b''
+                    data_msg = b''
+                    index = data.find(b'\n')
+            else:
+                data_msg = data
 
     def parse_data(self, message: bytes):
         print("Parsing message ", message)
