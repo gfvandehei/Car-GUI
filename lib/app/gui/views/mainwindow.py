@@ -20,7 +20,10 @@ class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle('CarGUI')
-
+        self.setStyleSheet("""
+        background-color: #121212;
+        color: #ffffff;
+        """)
         # Initialize all the pages
  
 

@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0347c6a1-3a8d-4788-b0e8-b400ade91da8}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>bin\main.py</StartupFile>
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="bin\fake_network_sensor.py" />
+    <Compile Include="bin\main.py" />
+    <Compile Include="bin\sensors\climate_sensor.py" />
+    <Compile Include="bin\sensors\fake_camera_sensor.py" />
+    <Compile Include="bin\sensors\real_camera_sensor.py" />
+    <Compile Include="bin\start_gui.py" />
+    <Compile Include="lib\app\core\core.py" />
+    <Compile Include="lib\app\core\logger.py" />
+    <Compile Include="lib\app\core\__init__.py" />
+    <Compile Include="lib\app\gui\apps\appscreen.py" />
+    <Compile Include="lib\app\gui\apps\climateapp.py" />
+    <Compile Include="lib\app\gui\apps\singlecameraapp.py" />
+    <Compile Include="lib\app\gui\apps\__init__.py" />
+    <Compile Include="lib\app\gui\controllers\screencontroller.py" />
+    <Compile Include="lib\app\gui\controllers\__init__.py" />
+    <Compile Include="lib\app\gui\views\mainwindow.py" />
+    <Compile Include="lib\app\gui\widgets\appscreenbutton.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="lib\app\gui\widgets\climategraph.py" />
+    <Compile Include="lib\app\gui\widgets\climate_sensor.py" />
+    <Compile Include="lib\app\gui\widgets\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="lib\app\gui\widgets\tachiometer.py" />
+    <Compile Include="lib\app\gui\__init__.py" />
+    <Compile Include="lib\app\sensors\sensor.py" />
+    <Compile Include="lib\app\sensors\sensor_climate.py" />
+    <Compile Include="lib\app\sensors\sensor_factory.py" />
+    <Compile Include="lib\app\sensors\sensor_store.py" />
+    <Compile Include="lib\app\sensors\sensor_types\camera_sensor.py" />
+    <Compile Include="lib\app\sensors\sensor_types\climate_sensor.py" />
+    <Compile Include="lib\app\sensors\udp_detector.py" />
+    <Compile Include="lib\app\sensors\__init__.py" />
+    <Compile Include="lib\app\__init__.py" />
+    <Compile Include="lib\common\commandable.py" />
+    <Compile Include="lib\common\singleton.py" />
+    <Compile Include="lib\common\tcpimageserver.py" />
+    <Compile Include="lib\sensors\basesensor.py" />
+    <Compile Include="lib\sensors\camera_sensor\camera.py" />
+    <Compile Include="lib\sensors\camera_sensor\camerasensor.py" />
+    <Compile Include="lib\sensors\climate_sensor\network_client\climatesensor.py" />
+    <Compile Include="lib\sensors\fake_camera_sensor\fakecamerasensor.py" />
+    <Compile Include="lib\sensor_client\fake_climate_sensor.py" />
+    <Compile Include="lib\sensor_client\network_sensor\broadcaster.py" />
+    <Compile Include="lib\sensor_client\network_sensor\datasource.py" />
+    <Compile Include="lib\sensor_client\network_sensor\network_sensor.py" />
+    <Compile Include="lib\sensor_client\network_sensor\random_data_source.py" />
+    <Compile Include="lib\sensor_client\network_sensor\sessionmanager.py" />
+    <Compile Include="lib\sensor_client\network_sensor\__init__.py" />
+    <Compile Include="lib\sensor_client\__init__.py" />
+    <Compile Include="lib\__init__.py" />
+    <Compile Include="setup.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="docs\app_definitions.txt" />
+    <Content Include="docs\Sensor Definitions.txt" />
+    <Content Include="resources\humidity.png" />
+    <Content Include="resources\temperature.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin" />
+    <Folder Include="bin\sensors" />
+    <Folder Include="docs" />
+    <Folder Include="lib" />
+    <Folder Include="lib\app" />
+    <Folder Include="lib\app\core" />
+    <Folder Include="lib\app\gui" />
+    <Folder Include="lib\app\gui\apps" />
+    <Folder Include="lib\app\gui\controllers" />
+    <Folder Include="lib\app\gui\views" />
+    <Folder Include="lib\app\gui\widgets" />
+    <Folder Include="lib\app\sensors" />
+    <Folder Include="lib\app\sensors\sensor_types" />
+    <Folder Include="lib\common" />
+    <Folder Include="lib\sensors" />
+    <Folder Include="lib\sensors\camera_sensor" />
+    <Folder Include="lib\sensors\climate_sensor\" />
+    <Folder Include="lib\sensors\climate_sensor\network_client" />
+    <Folder Include="lib\sensors\fake_camera_sensor" />
+    <Folder Include="lib\sensor_client" />
+    <Folder Include="lib\sensor_client\network_sensor" />
+    <Folder Include="resources" />
+  </ItemGroup>
+  <ItemGroup>
+    <Interpreter Include="env\">
+      <Id>env</Id>
+      <Version>3.7</Version>
+      <Description>env (Python 3.7 (64-bit))</Description>
+      <InterpreterPath>Scripts\python.exe</InterpreterPath>
+      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
+      <Architecture>X64</Architecture>
+    </Interpreter>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+</Project>
